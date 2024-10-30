@@ -14,7 +14,7 @@ input_file = sys.argv[1]
 chat_files_folder = "../../Work/"
 file_path = os.path.join(chat_files_folder, input_file)
 
-def main():
+def start_chat():
 
     # Set default values
         conversation_history = []
@@ -46,4 +46,4 @@ def main():
         else:
             print("No unanswered questions found in the input file.")
 
-main()
+start_chat()
