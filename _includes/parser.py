@@ -1,8 +1,9 @@
 def parse_markdown(input_file):
-    with open(input_file, 'r', encoding='utf-8') as file:
-        content = file.read()
 
     conversation_history = []
+
+    with open(input_file, 'r', encoding='utf-8') as file:
+        content = file.read()
 
     # Extract the initial section and split it by lines
     initial_section = content.split('<hr class="__AI_plugin_role-')[0].strip().splitlines()

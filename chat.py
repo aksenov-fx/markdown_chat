@@ -1,49 +1,29 @@
 import json
-import openai
 import sys
 import os
 
 from _includes.parser import parse_markdown
-from _includes.streamer import stream_response
+from _includes.api_composer import api_composer
+from _includes.logger import logger
+from _includes.streamer import Streamer
 
-# Set variables
+# Create streamer
 api_key = open("_includes/api_key.txt", "r").read().strip()
-client = openai.OpenAI(api_key=api_key)
+streamer = Streamer(api_key)
 
+# Set file_path
 input_file = sys.argv[1]
 chat_files_folder = "../../Work/"
 file_path = os.path.join(chat_files_folder, input_file)
 
-def start_chat():
+# Parse file_path
+result = parse_markdown(file_path)
 
-    # Set default values
-        conversation_history = []
-        system_commands = "I am a helpful assistant."
-        max_tokens = 1024
+# Compose API
+api_params = api_composer(result)
 
-    # Parse the Markdown file
-        result = parse_markdown(file_path)
-        conversation_history = result[0]
-        latest_question = result[1]
-        system_commands = result[2]
-        max_tokens = result[3]
+# Print API to terminal
+logger(api_params)
 
-    # Set the OpenAI API parameters
-        api_params = {
-            "model": "gpt-4",
-            "messages": [{"role": "system", "content": system_commands}] + conversation_history + [{"role": "user", "content": latest_question}],
-            "max_tokens": max_tokens,
-            "stream": True
-        }
-
-    # Print the OpenAI API parameters
-        print("Sending the following request to the OpenAI API:")
-        print(json.dumps(api_params, indent=2))
-
-    # Send the request to the OpenAI API
-        if latest_question:
-            stream_response(client, file_path, api_params)
-        else:
-            print("No unanswered questions found in the input file.")
-
-start_chat()
+# Post API request and stream response to file_path
+streamer.stream_response(file_path, api_params)
