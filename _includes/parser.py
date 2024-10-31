@@ -1,4 +1,4 @@
-def parse_markdown(input_file):
+def parser(input_file):
 
     conversation_history = []
 
