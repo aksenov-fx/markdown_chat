@@ -31,35 +31,32 @@ def process_file(file_path):
     streamer.stream_response(file_path, api_params)
 
 class CommandHandler(socketserver.BaseRequestHandler):
-    def handle(self):
+    def handle(self): #method is called automatically by server upon receiving a new request
 
         while True:
             command = self.request.recv(1024).decode('utf-8').strip()
-            
+
             if not command:
                 break
 
-            if command == "say_hi":
-                response = "hello"
+            import os
 
-            elif command == "exit":
-                response = "Exiting..."
-                self.request.sendall(response.encode('utf-8'))
-                break
+            posix_file_path = os.path.normpath(command).replace('\\', '/')
+            print(command) if enable_logs else None
+            print(posix_file_path) if enable_logs else None
 
-            else:
-                response = "Unknown command"
+            process_file(posix_file_path)
 
-            self.request.sendall(response.encode('utf-8'))
+            #self.request.sendall(response.encode('utf-8'))
 
-        print("Client disconnected")
+        print("Client disconnected")  if enable_logs else None
 
 # Create streamer
 api_key = open("_includes/api_key.txt", "r").read().strip()
 streamer = Streamer(api_key)
 
 # Set mode
-enable_logs = False
+enable_logs = True
 create_listener = 1
 
 if create_listener:
