@@ -1,5 +1,5 @@
 <%*
-const currentNote = tp.file.find_tfile(tp.file.title);
+const currentNote = app.workspace.activeLeaf.view.file;;
 
 if (!currentNote) {
     throw new Error("No active note found.");
