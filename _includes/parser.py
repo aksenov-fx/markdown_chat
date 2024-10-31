@@ -26,7 +26,7 @@ def parser(input_file):
     for section in sections:
         if section.startswith('user">'):
             user_input = section.split('\n', 1)[1].strip()
-            user_input = user_input[2:] if user_input.startswith("# ") else text
+            user_input = user_input[2:] if user_input.startswith("# ") else user_input
             conversation_history.append({"role": "user", "content": user_input})
 
         elif section.startswith('assistant">'):
