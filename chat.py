@@ -1,11 +1,3 @@
-"""
-Workflow:
-    1. Listener receives a command
-        2. Listener passes command to CommandHandler
-            3. CommandHandler calls process_file method
-                4. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
-
-"""
 import sys
 import os
 import socketserver
@@ -15,14 +7,14 @@ from _includes.api_composer import api_composer
 from _includes.logger import logger
 from _includes.streamer import Streamer
 
-# Create streamer
-api_key = open("_includes/api_key.txt", "r").read().strip()
-streamer = Streamer(api_key)
+"""
 
-# Set file_path
-input_file = sys.argv[1]
-chat_files_folder = "../../Work/"
-file_path = os.path.join(chat_files_folder, input_file)
+Workflow:
+    1. Listener receives a command and passes it to CommandHandler
+        2. CommandHandler calls process_file method
+            3. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
+
+"""
 
 def process_file(file_path):
 
@@ -33,7 +25,7 @@ def process_file(file_path):
     api_params = api_composer(result)
 
     # Print API to terminal
-    logger(api_params)
+    logger(api_params)# if enable_logs else None #TODO:
 
     # Post API request and stream response to file_path
     streamer.stream_response(file_path, api_params)
@@ -62,7 +54,22 @@ class CommandHandler(socketserver.BaseRequestHandler):
 
         print("Client disconnected")
 
-# Listener
-with socketserver.ThreadingTCPServer(('localhost', 9999), CommandHandler) as server:
-    print("Server listening on port 9999")
-    server.serve_forever()
+# Create streamer
+api_key = open("_includes/api_key.txt", "r").read().strip()
+streamer = Streamer(api_key)
+
+# Set mode
+enable_logs = False
+create_listener = 1
+
+if create_listener:
+    # Create Listener and accept commands from command line
+    with socketserver.ThreadingTCPServer(('localhost', 9999), CommandHandler) as server:
+        print("Server listening on port 9999")
+        server.serve_forever()
+
+else:
+    # Accept commands from command line
+    input_file = sys.argv[1]
+    chat_files_folder = "../../Work/"
+    file_path = os.path.join(chat_files_folder, input_file)
