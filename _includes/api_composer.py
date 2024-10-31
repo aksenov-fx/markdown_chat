@@ -13,7 +13,7 @@ def api_composer(result):
     # Set the OpenAI API parameters
         api_params = {
             "model": "gpt-4",
-            "messages": [{"role": "system", "content": system_commands}] + conversation_history + [{"role": "user", "content": latest_question}],
+            "messages": [{"role": "system", "content": system_commands}] + conversation_history,
             "max_tokens": max_tokens,
             "stream": True
         }

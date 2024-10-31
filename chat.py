@@ -25,10 +25,10 @@ def process_file(file_path):
     api_params = api_composer(result)
 
     # Print API to terminal
-    logger(api_params)# if enable_logs else None #TODO:
+    logger(api_params) if enable_logs else None
 
     # Post API request and stream response to file_path
-    streamer.stream_response(file_path, api_params)
+    streamer.stream_response(file_path, api_params) if not debug_mode else None
 
 class CommandHandler(socketserver.BaseRequestHandler):
     def handle(self): #method is called automatically by server upon receiving a new request
@@ -57,7 +57,8 @@ streamer = Streamer(api_key)
 
 # Set mode
 enable_logs = True
-create_listener = 1
+create_listener = True
+debug_mode = False #does not send requests/stream responses
 
 if create_listener:
     # Create Listener and accept commands from command line
@@ -70,3 +71,5 @@ else:
     input_file = sys.argv[1]
     chat_files_folder = "../../Work/"
     file_path = os.path.join(chat_files_folder, input_file)
+
+    process_file(file_path)

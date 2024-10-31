@@ -26,15 +26,12 @@ def parser(input_file):
     for section in sections:
         if section.startswith('user">'):
             user_input = section.split('\n', 1)[1].strip()
+            user_input = user_input[2:] if user_input.startswith("# ") else text
             conversation_history.append({"role": "user", "content": user_input})
 
         elif section.startswith('assistant">'):
             assistant_response = section.split('\n', 1)[1].strip()
             conversation_history.append({"role": "assistant", "content": assistant_response})
-
-        elif section.startswith('system">'):
-            system_commands = section.split('\n', 1)[1].strip().split('\n')
-            system_commands = [command.strip() for command in system_commands]
 
     for message in reversed(conversation_history):
         if message["role"] == "user":
