@@ -69,7 +69,5 @@ if create_listener:
 else:
     # Accept commands from command line
     input_file = sys.argv[1]
-    chat_files_folder = "../../Work/"
-    file_path = os.path.join(chat_files_folder, input_file)
-
-    process_file(file_path)
+    posix_file_path = os.path.normpath(input_file).replace('\\', '/')
+    process_file(posix_file_path)
