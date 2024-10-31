@@ -19,10 +19,10 @@ Workflow:
 def process_file(file_path):
 
     # Parse file_path
-    result = parser(file_path)
+    result = parser(file_path, mode_map)
 
     # Compose API
-    api_params = api_composer(result)
+    api_params = api_composer(result, mode_map, default_chat_mode)
 
     # Print API to terminal
     logger(api_params) if enable_logs else None
@@ -55,11 +55,22 @@ class CommandHandler(socketserver.BaseRequestHandler):
 api_key = open("_includes/api_key.txt", "r").read().strip()
 streamer = Streamer(api_key)
 
-# Set mode
+# Set script mode
 enable_logs = True
 create_listener = True
 debug_mode = False #does not send requests/stream responses
 
+# Set chat mode
+mode_map = {
+    "ChatGPT": "g:",
+    "ChatGPT_NoHistory": "gn:",
+#    "Claude": "c:",
+#    "Claude_NoHistory": "cn:"
+}
+
+default_chat_mode = "ChatGPT"
+
+# Start script
 if create_listener:
     # Create Listener and accept commands from command line
     with socketserver.ThreadingTCPServer(('localhost', 9999), CommandHandler) as server:

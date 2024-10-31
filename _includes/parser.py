@@ -1,7 +1,8 @@
-def parser(input_file):
+def parser(input_file, mode_map):
 
     conversation_history = []
-
+    modes = list(mode_map.values())
+    
     with open(input_file, 'r', encoding='utf-8') as file:
         content = file.read()
 
@@ -27,6 +28,14 @@ def parser(input_file):
         if section.startswith('user">'):
             user_input = section.split('\n', 1)[1].strip()
             user_input = user_input[2:] if user_input.startswith("# ") else user_input
+
+            # Parse mode
+            if user_input.startswith(tuple(modes)):
+                mode = user_input.split(':', 1)[0].strip() + ":"
+                user_input = user_input.split(':', 1)[1].strip()
+            else:
+                mode = "Default"
+                
             conversation_history.append({"role": "user", "content": user_input})
 
         elif section.startswith('assistant">'):
@@ -36,5 +45,6 @@ def parser(input_file):
     for message in reversed(conversation_history):
         if message["role"] == "user":
             latest_question = message["content"]
+            break
 
-    return conversation_history, latest_question, system_commands, max_tokens
+    return conversation_history, latest_question, mode, system_commands, max_tokens
