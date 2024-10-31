@@ -23,15 +23,24 @@ def api_composer(result, mode_map, default_chat_mode):
                     mode = key
                     break
 
-    # Set the OpenAI API parameters
-        if mode in ["ChatGPT", "ChatGPT_NoHistory"]:
+    # Set OpenAI API parameters
+        if mode.startswith("ChatGPT"):
             api_params = {
                 "model": "gpt-4",
                 "max_tokens": max_tokens,
                 "stream": True,
 
                 "messages": [{"role": "system", "content": system_commands}] + 
-                (conversation_history if mode == "ChatGPT" else latest_question)
+                (conversation_history if mode in ["ChatGPT", "Claude"] else latest_question)
+        }
+
+    # Set Claude API parameters
+        if mode.startswith("Claude"):
+            api_params = {
+                "model": "claude-3-5-sonnet-20241022",
+                "max_tokens": max_tokens,
+                "system": system_commands,
+                "messages": (conversation_history if mode in ["ChatGPT", "Claude"] else latest_question)
             }
 
-        return api_params
+        return api_params, mode

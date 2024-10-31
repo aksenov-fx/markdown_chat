@@ -1,11 +1,13 @@
 import sys
 import os
 import socketserver
+import openai
+import anthropic
 
 from _includes.parser import parser
 from _includes.api_composer import api_composer
 from _includes.logger import logger
-from _includes.streamer import Streamer
+from _includes.streamer import streamer
 
 """
 
@@ -13,6 +15,18 @@ Workflow:
     1. Listener receives a command and passes it to CommandHandler
         2. CommandHandler calls process_file method
             3. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
+
+Install dependencies:
+    pip install openai
+    pip install anthropic
+
+Windows may require to install python-certifi-win32 to resolve certificate issues with Anthropic client:
+    pip install python-certifi-win32
+
+The code was tested with:
+    Python 3.12.2
+    openai 1.52.2
+    anthropic 0.37.1
 
 """
 
@@ -22,13 +36,14 @@ def process_file(file_path):
     result = parser(file_path, mode_map)
 
     # Compose API
-    api_params = api_composer(result, mode_map, default_chat_mode)
+    api_params, mode = api_composer(result, mode_map, default_chat_mode)
 
     # Print API to terminal
     logger(api_params) if enable_logs else None
 
     # Post API request and stream response to file_path
-    streamer.stream_response(file_path, api_params) if not debug_mode else None
+    client = openai_client if mode.startswith("ChatGPT") else claude_client if mode.startswith("Claude") else None
+    streamer(mode, client, file_path, api_params) if not debug_mode else None
 
 class CommandHandler(socketserver.BaseRequestHandler):
     def handle(self): #method is called automatically by server upon receiving a new request
@@ -51,9 +66,15 @@ class CommandHandler(socketserver.BaseRequestHandler):
 
         print("Client disconnected")  if enable_logs else None
 
-# Create streamer
-api_key = open("_includes/api_key.txt", "r").read().strip()
-streamer = Streamer(api_key)
+# Create ChatGPT streamer
+chatgpt_api_key = open("_includes/chatgpt_api_key.txt", "r").read().strip()
+if chatgpt_api_key:
+    openai_client = openai.OpenAI(api_key=chatgpt_api_key)
+
+# Create Claude streamer
+claude_api_key = open("_includes/claude_api_key.txt", "r").read().strip()
+if claude_api_key:
+    claude_client = anthropic.Anthropic(api_key=claude_api_key)
 
 # Set script mode
 enable_logs = True
@@ -64,8 +85,8 @@ debug_mode = False #does not send requests/stream responses
 mode_map = {
     "ChatGPT": "g:",
     "ChatGPT_NoHistory": "gn:",
-#    "Claude": "c:",
-#    "Claude_NoHistory": "cn:"
+    "Claude": "c:",
+    "Claude_NoHistory": "cn:"
 }
 
 default_chat_mode = "ChatGPT"
