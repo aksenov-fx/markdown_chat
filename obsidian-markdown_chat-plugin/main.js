@@ -14,6 +14,8 @@ class MyPlugin extends Plugin {
 
                     const vaultPath = this.app.vault.adapter.basePath;
                     const absolutePath = path.join(vaultPath, activeFile.path);
+                    
+                    this.app.commands.executeCommandById('editor:save-file')
                     this.sendCommandToServer(absolutePath);
 
                 } else {
