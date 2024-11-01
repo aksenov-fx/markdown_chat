@@ -5,18 +5,17 @@ const path = require('path');
 class MyPlugin extends Plugin {
     async onload() {
 
-        // Command for sending absolute path
         this.addCommand({
             id: 'send-note-path',
             name: 'Send note path to Python Server',
             callback: () => {
                 const activeFile = this.app.workspace.getActiveFile();
                 if (activeFile) {
-                    // Get the vault's root path
+
                     const vaultPath = this.app.vault.adapter.basePath;
-                    // Combine vault path with file's relative path to get absolute path
                     const absolutePath = path.join(vaultPath, activeFile.path);
                     this.sendCommandToServer(absolutePath);
+
                 } else {
                     console.log('No file is currently open');
                 }
@@ -24,14 +23,12 @@ class MyPlugin extends Plugin {
         });
     }
 
-        // Command for sending relative path
 /*         this.addCommand({
             id: 'send-relative-path',
             name: 'Send Relative Path to Python Server',
             callback: () => {
                 const activeFile = this.app.workspace.getActiveFile();
                 if (activeFile) {
-                    // This gets the relative path from vault root (e.g., "folder/note.md")
                     const relativePath = activeFile.path;
                     this.sendCommandToServer(relativePath);
                 } else {
