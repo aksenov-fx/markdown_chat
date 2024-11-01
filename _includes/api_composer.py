@@ -26,7 +26,7 @@ def api_composer(result, mode_map, default_chat_mode):
     # Set OpenAI API parameters
         if mode.startswith("ChatGPT"):
             api_params = {
-                "model": "gpt-4",
+                "model": "gpt-4o",
                 "max_tokens": max_tokens,
                 "stream": True,
 
