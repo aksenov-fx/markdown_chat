@@ -29,7 +29,9 @@ def parser(input_file, mode_map):
 
         # Parse system_commands
         if section.startswith('system">'):
-            system_commands = section.split('\n', 1)[1].replace("**Custom instructions:**", "").strip()
+            system_commands = section.split('\n', 1)[1]
+            system_commands = system_commands.replace("Custom instructions:", "").strip()
+            system_commands = system_commands.replace("```", "").strip()
 
         # Parse user_input
         if section.startswith('user">'):
