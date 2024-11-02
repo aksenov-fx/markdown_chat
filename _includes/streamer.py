@@ -1,3 +1,4 @@
+import os
 def streamer(mode, client, file_path, api_params):
 
     try:
@@ -14,7 +15,8 @@ def streamer(mode, client, file_path, api_params):
                     with open(file_path, "a", encoding="utf-8") as f:
                         f.write(chunk.choices[0].delta.content)
                         f.flush()
-                        
+                        os.fsync(f.fileno())
+
         # Claude streaming
         elif mode.startswith("Claude"):
             with client.messages.stream(**api_params) as stream:
@@ -22,6 +24,7 @@ def streamer(mode, client, file_path, api_params):
                     with open(file_path, "a", encoding="utf-8") as f:
                         f.write(text)
                         f.flush()
+                        os.fsync(f.fileno())
 
         # Add the user marker after the stream is complete
         with open(file_path, "a", encoding="utf-8") as f:

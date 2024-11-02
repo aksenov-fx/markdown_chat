@@ -1,8 +1,6 @@
 import sys
 import os
 import socketserver
-import openai
-import anthropic
 
 from _includes.parser import parser
 from _includes.api_composer import api_composer
@@ -16,9 +14,11 @@ Workflow:
         2. CommandHandler calls process_file method
             3. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
 
-Install dependencies:
-    pip install openai
-    pip install anthropic
+At least one lib is required to run this script:
+    pip install openai #for ChatGPT
+    pip install anthropic #for Claude
+    or:
+    run install_dependencies.bat #install both libs
 
 Windows may require to install python-certifi-win32 to resolve certificate issues with Anthropic client:
     pip install python-certifi-win32
@@ -69,12 +69,14 @@ class CommandHandler(socketserver.BaseRequestHandler):
 # Create ChatGPT streamer
 chatgpt_api_key = open("_includes/chatgpt_api_key.txt", "r").read().strip()
 if chatgpt_api_key:
+    import openai
     openai_client = openai.OpenAI(api_key=chatgpt_api_key)
 
 # Create Claude streamer
 claude_api_key = open("_includes/claude_api_key.txt", "r").read().strip()
 if claude_api_key:
-    claude_client = anthropic.Anthropic(api_key=claude_api_key)
+    import anthropic
+    claude_client = anthropic.Anthropic(api_key=claude_api_key)    
 
 # Set script mode
 enable_logs = True
