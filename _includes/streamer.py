@@ -1,3 +1,6 @@
+import os
+import time
+
 def streamer(mode, client, file_path, api_params):
 
     try:
@@ -27,6 +30,11 @@ def streamer(mode, client, file_path, api_params):
         with open(file_path, "a", encoding="utf-8") as f:
             f.write(f"\n\n<hr class=\"__AI_plugin_role-user\">\n\n# ")
             f.flush()
+
+        # Forces Obsidian to re-read the file
+        time.sleep(0.5)
+        current_time = time.time()
+        os.utime(file_path, (current_time, current_time))
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
