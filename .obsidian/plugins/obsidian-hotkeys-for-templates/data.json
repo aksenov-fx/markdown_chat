@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "templaterFiles": [
+    "MoveNote.md",
+    "CallAPI.md",
+    "ClearNote.md",
+    "Delete-last-response.md"
+  ],
+  "newFileTemplates": [],
+  "openNewFileTemplateInNewPane": false,
+  "useNewFileTemplateOnFileCreation": false
+}

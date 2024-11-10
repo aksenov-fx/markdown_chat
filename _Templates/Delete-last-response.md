@@ -1,7 +1,7 @@
 <%*
 	const editor = app.workspace.activeLeaf.view.sourceMode.cmEditor; 
 	const noteContent = editor.getValue();
-	const lastIndex = noteContent.lastIndexOf('\n<hr class="__AI_plugin_role-assistant">');
+	const lastIndex = noteContent.lastIndexOf('\n\n<hr class="__AI_plugin_role-assistant">');
 	
 	if (lastIndex !== -1) { 
 	  const firstPart = noteContent.substring(0, lastIndex);

@@ -32,7 +32,7 @@ def streamer(mode, client, file_path, api_params):
             f.flush()
 
         # Forces Obsidian to re-read the file
-        time.sleep(0.5)
+        time.sleep(1)
         current_time = time.time()
         os.utime(file_path, (current_time, current_time))
 

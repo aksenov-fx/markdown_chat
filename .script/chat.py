@@ -14,15 +14,6 @@ Workflow:
         2. CommandHandler calls process_file method
             3. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
 
-At least one lib is required to run this script:
-    pip install openai #for ChatGPT
-    pip install anthropic #for Claude
-    or:
-    run install_dependencies.bat #install both libs
-
-Windows may require to install python-certifi-win32 to resolve certificate issues with Anthropic client:
-    pip install python-certifi-win32
-
 The code was tested with:
     Python 3.12.2
     openai 1.52.2
@@ -67,13 +58,13 @@ class CommandHandler(socketserver.BaseRequestHandler):
         print("Client disconnected")  if enable_logs else None
 
 # Create ChatGPT streamer
-chatgpt_api_key = open("_includes/chatgpt_api_key.txt", "r").read().strip()
+chatgpt_api_key = open("chatgpt_api_key.txt", "r").read().strip()
 if chatgpt_api_key:
     import openai
     openai_client = openai.OpenAI(api_key=chatgpt_api_key)
 
 # Create Claude streamer
-claude_api_key = open("_includes/claude_api_key.txt", "r").read().strip()
+claude_api_key = open("claude_api_key.txt", "r").read().strip()
 if claude_api_key:
     import anthropic
     claude_client = anthropic.Anthropic(api_key=claude_api_key)    
@@ -96,8 +87,8 @@ default_chat_mode = "ChatGPT"
 # Start script
 if create_listener:
     # Create Listener and accept commands from command line
-    with socketserver.ThreadingTCPServer(('localhost', 9999), CommandHandler) as server:
-        print("Server listening on port 9999")
+    with socketserver.ThreadingTCPServer(('localhost', 9992), CommandHandler) as server:
+        print("Server listening on port 9992")
         server.serve_forever()
 
 else:
