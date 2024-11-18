@@ -5,7 +5,7 @@ import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) #otherwise import from parent directory does not work
 import config
 
-def logger(api_params="", path="", posix_file_path=""):
+def log(api_params="", path="", posix_file_path=""):
     if not config.enable_logs:
         return
     

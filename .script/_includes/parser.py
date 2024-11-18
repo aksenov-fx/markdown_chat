@@ -1,4 +1,4 @@
-def parser(input_file, mode_map):
+def parse(input_file, mode_map):
 
     conversation_history = []
     modes = list(mode_map.values())

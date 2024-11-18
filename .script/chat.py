@@ -3,19 +3,19 @@ import os
 import socketserver
 import config
 
-from _includes.parser import parser
-from _includes.api_composer import api_composer
-from _includes.logger import logger
-from _includes.streamer import streamer
+from _includes.parser import parse
+from _includes.api_composer import compose_api_request
+from _includes.logger import log
+from _includes.streamer import stream
 
 # -------------------------------- #
 
 """
 
 Workflow:
-    1. Listener receives a command and passes it to CommandHandler
-        2. CommandHandler calls process_file method
-            3. process_file calls parse_markdown, api_composer, logger and streamer.stream_response methods
+    1. Listener receives an md file path and passes it to PathHandler
+        2. PathHandler calls process_file method on the file path
+            3. process_file calls parse, compose_api_request, log and stream methods
 
 The code was tested with:
     Python 3.12.2
@@ -57,18 +57,18 @@ mode_map = {
 def process_file(file_path):
 
     # Parse file_path
-    result = parser(file_path, mode_map)
+    result = parse(file_path, mode_map)
 
     # Compose API
-    api_params, mode = api_composer(result, mode_map, config.default_chat_mode)
+    api_params, mode = compose_api_request(result, mode_map, config.default_chat_mode)
 
     # Print API to terminal
-    logger(api_params)
+    log(api_params)
 
     # Post API request and stream response to file_path
     client = ( openai_client if mode.startswith("ChatGPT")
                else claude_client )
-    streamer(mode, client, file_path, api_params) if not config.debug_mode else None
+    stream(mode, client, file_path, api_params) if not config.debug_mode else None
 
 # -------------------------------- #
 
@@ -81,7 +81,7 @@ class PathHandler(socketserver.BaseRequestHandler):
             if not path: break
 
             posix_file_path = os.path.normpath(path).replace('\\', '/')
-            logger(path=path, posix_file_path=posix_file_path)
+            log(path=path, posix_file_path=posix_file_path)
 
             process_file(posix_file_path)
 

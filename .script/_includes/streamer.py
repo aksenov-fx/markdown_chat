@@ -1,7 +1,7 @@
 import os
 import time
 
-def streamer(mode, client, file_path, api_params):
+def stream(mode, client, file_path, api_params):
 
     try:
         # Add the assistant marker before starting the stream

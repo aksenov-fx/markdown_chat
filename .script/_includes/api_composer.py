@@ -1,4 +1,4 @@
-def api_composer(result, mode_map, default_chat_mode):
+def compose_api_request(result, mode_map, default_chat_mode):
 
     # Set default values
         system_commands = "I am a helpful assistant."

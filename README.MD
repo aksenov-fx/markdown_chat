@@ -50,7 +50,7 @@ Precede the question with the mode operator followed by a colon, like:
 Set `chat_mode` property to the desired mode operator - see example in **Syntax** chat  
 
 \- To set default mode **globally**:  
-Change the `default_chat_mode` variable in `chat.py`  
+Change the `default_chat_mode` variable in `config.py`  
 
 ## How it works
 To get a response, **Obsidian** sends the path of the currently opened note to `chat.py` script, which listens on port **TCP 9992**. The script gets the response and writes it to MD file word by word, while **Obsidian** displays the changes in real time.  
