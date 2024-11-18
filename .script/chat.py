@@ -1,11 +1,14 @@
 import sys
 import os
 import socketserver
+import config
 
 from _includes.parser import parser
 from _includes.api_composer import api_composer
 from _includes.logger import logger
 from _includes.streamer import streamer
+
+# -------------------------------- #
 
 """
 
@@ -21,60 +24,27 @@ The code was tested with:
 
 """
 
-def process_file(file_path):
+# -------------------------------- #
 
-    # Parse file_path
-    result = parser(file_path, mode_map)
+# Gets API keys
+chatgpt_api_key = open("chatgpt_api_key.txt", "r").read().strip()
+claude_api_key = open("claude_api_key.txt", "r").read().strip()
 
-    # Compose API
-    api_params, mode = api_composer(result, mode_map, default_chat_mode)
-
-    # Print API to terminal
-    logger(api_params) if enable_logs else None
-
-    # Post API request and stream response to file_path
-    client = openai_client if mode.startswith("ChatGPT") else claude_client if mode.startswith("Claude") else None
-    streamer(mode, client, file_path, api_params) if not debug_mode else None
-
-class CommandHandler(socketserver.BaseRequestHandler):
-    def handle(self): #method is called automatically by server upon receiving a new request
-
-        while True:
-            command = self.request.recv(1024).decode('utf-8').strip()
-
-            if not command:
-                break
-
-            import os
-
-            posix_file_path = os.path.normpath(command).replace('\\', '/')
-            print(command) if enable_logs else None
-            print(posix_file_path) if enable_logs else None
-
-            process_file(posix_file_path)
-
-            #self.request.sendall(response.encode('utf-8'))
-
-        print("Client disconnected")  if enable_logs else None
+# -------------------------------- #
 
 # Create ChatGPT streamer
-chatgpt_api_key = open("chatgpt_api_key.txt", "r").read().strip()
 if chatgpt_api_key:
     import openai
     openai_client = openai.OpenAI(api_key=chatgpt_api_key)
 
 # Create Claude streamer
-claude_api_key = open("claude_api_key.txt", "r").read().strip()
 if claude_api_key:
     import anthropic
     claude_client = anthropic.Anthropic(api_key=claude_api_key)    
 
-# Set script mode
-enable_logs = True
-create_listener = True
-debug_mode = False #does not send requests/stream responses
+# -------------------------------- #
 
-# Set chat mode
+# Set mode map
 mode_map = {
     "ChatGPT": "g:",
     "ChatGPT_NoHistory": "gn:",
@@ -82,12 +52,45 @@ mode_map = {
     "Claude_NoHistory": "cn:"
 }
 
-default_chat_mode = "ChatGPT"
+# -------------------------------- #
+
+def process_file(file_path):
+
+    # Parse file_path
+    result = parser(file_path, mode_map)
+
+    # Compose API
+    api_params, mode = api_composer(result, mode_map, config.default_chat_mode)
+
+    # Print API to terminal
+    logger(api_params)
+
+    # Post API request and stream response to file_path
+    client = ( openai_client if mode.startswith("ChatGPT")
+               else claude_client )
+    streamer(mode, client, file_path, api_params) if not config.debug_mode else None
+
+# -------------------------------- #
+
+# Accept md file path from socketserver and call process_file method on it
+class PathHandler(socketserver.BaseRequestHandler):
+    def handle(self): #method is called automatically by server upon receiving a new request
+
+        while True:
+            path = self.request.recv(1024).decode('utf-8').strip()
+            if not path: break
+
+            posix_file_path = os.path.normpath(path).replace('\\', '/')
+            logger(path=path, posix_file_path=posix_file_path)
+
+            process_file(posix_file_path)
+
+# -------------------------------- #
 
 # Start script
-if create_listener:
+if config.create_listener:
     # Create Listener and accept commands from command line
-    with socketserver.ThreadingTCPServer(('localhost', 9992), CommandHandler) as server:
+    with socketserver.ThreadingTCPServer(('localhost', 9992), PathHandler) as server:
         print("Server listening on port 9992")
         server.serve_forever()
 

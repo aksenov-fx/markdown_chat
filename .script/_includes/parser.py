@@ -4,8 +4,12 @@ def parser(input_file, mode_map):
     modes = list(mode_map.values())
     mode = "Default"
     
+    # -------------------------------- #
+
     with open(input_file, 'r', encoding='utf-8') as file:
         content = file.read()
+
+    # -------------------------------- #
 
     # Extract the initial section and split it by lines
     initial_section = content.split('<hr class="__AI_plugin_role-')[0].strip().splitlines()
@@ -21,6 +25,8 @@ def parser(input_file, mode_map):
         # Parse chat_mode
         if line.startswith("chat_mode: "):
             mode = line.split(":", 1)[1].strip() + ":"
+
+    # -------------------------------- #
 
     # Split the remaining content into sections for parsing conversation history
     sections = content.split('<hr class="__AI_plugin_role-')[1:]
@@ -50,10 +56,14 @@ def parser(input_file, mode_map):
             assistant_response = section.split('\n', 1)[1].strip()
             conversation_history.append({"role": "assistant", "content": assistant_response})
 
+    # -------------------------------- #
+
     # Parse latest_question
     for message in reversed(conversation_history):
         if message["role"] == "user":
             latest_question = message["content"]
             break
 
+    # -------------------------------- #
+    
     return conversation_history, latest_question, mode, system_commands, max_tokens
