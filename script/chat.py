@@ -1,15 +1,15 @@
 import sys
 import os
 import socketserver
-import config
 
-from _includes.parser import parse
-from _includes.api_composer import compose_api_request
-from _includes.logger import log
-from _includes.streamer import stream
+from script import config
+
+from script._includes.parser import parse
+from script._includes.api_composer import compose_api_request
+from script._includes.logger import log
+from script._includes.streamer import stream
 
 # -------------------------------- #
-
 """
 
 Workflow:
@@ -23,12 +23,12 @@ The code was tested with:
     anthropic 0.37.1
 
 """
-
 # -------------------------------- #
 
 # Gets API keys
-chatgpt_api_key = open("chatgpt_api_key.txt", "r").read().strip()
-claude_api_key = open("claude_api_key.txt", "r").read().strip()
+
+chatgpt_api_key = open(os.path.join(os.path.dirname(__file__), "chatgpt_api_key.txt")).read().strip()
+claude_api_key = open(os.path.join(os.path.dirname(__file__), "claude_api_key.txt")).read().strip()
 
 # -------------------------------- #
 
@@ -44,31 +44,20 @@ if claude_api_key:
 
 # -------------------------------- #
 
-# Set mode map
-mode_map = {
-    "ChatGPT": "g:",
-    "ChatGPT_NoHistory": "gn:",
-    "Claude": "c:",
-    "Claude_NoHistory": "cn:"
-}
-
-# -------------------------------- #
-
 def process_file(file_path):
 
-    # Parse file_path
-    result = parse(file_path, mode_map)
+    # Parse md file
+    result = parse(file_path)
 
     # Compose API
-    api_params, mode = compose_api_request(result, mode_map, config.default_chat_mode)
+    api_params, mode = compose_api_request(result)
 
     # Print API to terminal
     log(api_params)
 
     # Post API request and stream response to file_path
-    client = ( openai_client if mode.startswith("ChatGPT")
-               else claude_client )
-    stream(mode, client, file_path, api_params) if not config.debug_mode else None
+    client = ( openai_client if mode.startswith("ChatGPT") else claude_client )
+    stream(mode, client, file_path, api_params)
 
 # -------------------------------- #
 

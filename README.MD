@@ -8,7 +8,7 @@ This repo features a Python/Javascript project that allows to use **Obsidian** a
 
 ## Repository contents
 #### Backend:  
-**.script** - Python script that handles main logic  
+**script** - Python script that handles main logic  
 **.obsidian** - Obsidian vault configuration  
 **.devcontainer** - Dev container configuration  
 **_Templates** - Javascript templates for Templater plugin  
@@ -20,9 +20,9 @@ This repo features a Python/Javascript project that allows to use **Obsidian** a
 ## Installation instructions for Windows:
 1. Install [Python 3.12](https://www.python.org/downloads/release/python-3122/)  
 2. [Download](https://github.com/aksenov-fx/markdown_chat/archive/refs/heads/main.zip) and unzip the contents of the repository  
-3. Go to .script folder and run `initialize.bat`  
+3. Go to script folder and run `initialize.bat`  
 The script will install Python dependencies and ask for your API keys
-4. Run `run_script.bat`  
+4. Run `start_script.bat`  
 5. Open the repository folder as Vault in Obsidian  
 
 ## How to use

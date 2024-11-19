@@ -1,8 +1,13 @@
-def parse(input_file, mode_map):
+from script import config
+
+def parse(input_file):
 
     conversation_history = []
-    modes = list(mode_map.values())
+    modes = list(config.mode_map.values())
     mode = "Default"
+    
+    max_tokens = config.max_tokens
+    system_commands = config.system_commands
     
     # -------------------------------- #
 
