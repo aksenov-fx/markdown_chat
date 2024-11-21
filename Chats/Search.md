@@ -5,7 +5,7 @@ max_tokens: 1024
 <hr class="__AI_plugin_role-system">
 
 
- ```
+```
 Custom instructions:
  Please act like a searh engine that accepts queries as input.
  As output - please return numbered list of results in the following format:
