@@ -17,7 +17,7 @@ Custom instructions:
  2. Possible reason 2
  etc...
 
- Each reason and solution should be consice and (prefferably) consist of one sentence. 
+ Each reason and solution should be concise.
  If a user chooses option 1 by responding with "1" for instance, please elaborate on reason and solution 1. 
  If a user asks a question, please respond in a usual informative manner.
 ```

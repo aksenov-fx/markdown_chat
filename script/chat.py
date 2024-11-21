@@ -53,7 +53,7 @@ def process_file(file_path):
     api_params, mode = compose_api_request(result)
 
     # Print API to terminal
-    log(api_params)
+    log(api_params=api_params,mode=mode)
 
     # Post API request and stream response to file_path
     client = ( openai_client if mode.startswith("ChatGPT") else claude_client )

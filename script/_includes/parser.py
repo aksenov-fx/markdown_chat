@@ -36,8 +36,9 @@ def parse(input_file):
     # Split the remaining content into sections for parsing conversation history
     sections = content.split('<hr class="__AI_plugin_role-')[1:]
 
-    for section in sections:
-
+    for index, section in enumerate(sections):
+        is_last_section = (index == len(sections) - 1)
+        
         # Parse system_commands
         if section.startswith('system">'):
             system_commands = section.split('\n', 1)[1]
@@ -51,7 +52,7 @@ def parse(input_file):
 
             # Parse mode
             if user_input.startswith(tuple(modes)):
-                mode = user_input.split(':', 1)[0].strip() + ":"
+                if is_last_section: mode = user_input.split(':', 1)[0].strip() + ":"
                 user_input = user_input.split(':', 1)[1].strip()
 
             conversation_history.append({"role": "user", "content": user_input})
@@ -63,11 +64,10 @@ def parse(input_file):
 
     # -------------------------------- #
 
-    # Parse latest_question
+    # Get latest_question
     for message in reversed(conversation_history):
-        if message["role"] == "user":
-            latest_question = message["content"]
-            break
+        latest_question = message["content"]
+        break
 
     # -------------------------------- #
     
