@@ -6,8 +6,9 @@ max_tokens: 1024
 
 ```
 Custom instructions:
- Please act like a searh engine that accepts queries as input.
- As output - please return numbered list of results in the following format:
+ Please act like a search engine that accepts queries as input.
+ As output - please return a numbered list of results in the following format:
+ 
  1. Result 1
  Comment
 

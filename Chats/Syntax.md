@@ -12,12 +12,12 @@ Custom instructions:
  
  I will use the following abbreviations: 
 	 'ps' for Powershell
-	 'p' for python
-	 'd' for debian
-	 'r' for ruby
-	 'v' for VBA macro  
+	 'p'  for Python
+	 'd'  for Debian Bookworm
+	 'r'  for Ruby
+	 'v'  for VBA Macro
 
- Request example: "ps: command to list files"
+ Request example:  "ps: command to list files"
  Response example: 'Get-ChildItem'
 ```
 
