@@ -53,11 +53,14 @@ def parse(input_file):
             user_input = user_input[2:] if user_input.startswith("# ") else user_input
 
             # Parse mode
-            if user_input.startswith(tuple(modes)) and is_last_section:
-                mode = user_input.split(':', 1)[0].strip() + ":"
+            has_mode = user_input.startswith(tuple(modes))
 
-            if user_input.startswith(tuple(modes)) and not is_last_section:
-                user_input = user_input.split(':', 1)[1].strip()
+            if has_mode:
+                section_mode, user_input = user_input.split(':', 1)
+                user_input = user_input.strip()
+                
+                if is_last_section:
+                    mode = section_mode.strip() + ":"
 
             conversation_history.append({"role": "user", "content": user_input})
 
@@ -68,7 +71,7 @@ def parse(input_file):
             is_last_section = (index == len(sections) - 1)
             
             # Parse user_input
-            if section.startswith('user">'): 
+            if section.startswith('user">'):
                 parse_user_input(section)
 
             # Parse assistant_response
