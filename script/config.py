@@ -9,7 +9,7 @@ create_listener = True
 debug_mode = False 
 
 # Set default chat mode
-default_chat_mode = "Claude"
+default_chat_mode = "ChatGPT"
 
 # Set mode map
 mode_map = {
