@@ -2,6 +2,7 @@ import os
 import time
 
 from script import config
+from script._includes.logger import log
 
 # -------------------------------- #
 
@@ -18,17 +19,23 @@ def stream(mode, client, file_path, api_params):
     # -------------------------------- #
 
     def stream_gpt():
+        response_text = ""
         stream = client.chat.completions.create(**api_params)
         for chunk in stream:
             if chunk.choices[0].delta.content is not None:
                 file_write(chunk.choices[0].delta.content)
-
+                response_text += chunk.choices[0].delta.content
+        log(response=response_text)
+        
     # -------------------------------- #
 
     def stream_claude():
+        response_text = ""
         with client.messages.stream(**api_params) as stream:
             for text in stream.text_stream:
                 file_write(text)
+                response_text += text
+        log(response=response_text)
 
     # -------------------------------- #
 

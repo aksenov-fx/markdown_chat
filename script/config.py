@@ -9,14 +9,12 @@ create_listener = True
 debug_mode = False 
 
 # Set default chat mode
-default_chat_mode = "ChatGPT"
+default_chat_mode = "Claude"
 
 # Set mode map
 mode_map = {
     "ChatGPT": "g:",
-    "ChatGPT_NoHistory": "gn:",
     "Claude": "c:",
-    "Claude_NoHistory": "cn:"
 }
 
 # Set model names

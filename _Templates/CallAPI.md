@@ -1,9 +1,9 @@
 <%* 
-	// Execute the first command
-	app.commands.executeCommandById('editor:fold-all');
+	let params = tp.frontmatter;
+	if (params && params.fold === true) {
+	    app.commands.executeCommandById('editor:fold-all');
+	}
 	
-	// Execute the second command
-	//app.commands.executeCommandById('chatgpt-md:call-chatgpt-api');
 	app.commands.executeCommandById('markdown-chat:send-note-path');
 
 	// Get command ids in console:

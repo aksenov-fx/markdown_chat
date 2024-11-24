@@ -1,7 +1,7 @@
 import json
 from script import config
 
-def log(api_params="", mode="", path="", posix_file_path=""):
+def log(api_params="", mode="", path="", posix_file_path="", response=""):
     if not config.enable_logs:
         return
     
@@ -17,5 +17,8 @@ def log(api_params="", mode="", path="", posix_file_path=""):
     
     if posix_file_path:
         print("Posix file path: ", posix_file_path)
+
+    if response:
+        print("Response: ", response)
 
     print()

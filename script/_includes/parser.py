@@ -3,24 +3,29 @@ from script import config
 def parse(input_file):
 
     def get_sections(file_content):
-
-        # Extract the initial section and split it by lines
-        all_sections = file_content.split('<hr class="__AI_plugin_role-')
         
-        # Parse initial section for system_commands and max_tokens
-        parameters_section = all_sections[0].strip().splitlines()
+        role_splitter = '<hr class="__AI_plugin_role-'
+        all_sections = file_content.split(role_splitter)
 
-        # Split the remaining content into sections for parsing conversation history
-        sections = all_sections[1:]
+        parameters_section = all_sections[0]
+        system_commands_section = all_sections[1]
 
-        return parameters_section, sections
+        # Split sections by history splitter
+        try: 
+            conversation_sections = file_content.split('<hr class="__AI_plugin_conversation_splitter">')[-1]
+            conversation_sections = conversation_sections.split(role_splitter)
+        except: 
+            conversation_sections = file_content.split(role_splitter)[1:]
+
+        return parameters_section, system_commands_section, conversation_sections
     
     # -------------------------------- #
 
     def parse_parameters_section(parameters_section):
         nonlocal max_tokens, mode
+        parameters = parameters_section.strip().splitlines()
 
-        for line in parameters_section:
+        for line in parameters:
             line = line.strip()
             
             # Parse max_tokens
@@ -33,11 +38,11 @@ def parse(input_file):
 
     # -------------------------------- #
 
-    def parse_system_commands(sections):
+    def parse_system_commands(system_commands_section):
         nonlocal system_commands
-        if not sections[0].startswith('system">'): return
-        
-        system_commands = sections[0].split('\n', 1)[1]
+        if not system_commands_section.startswith('system">'): return
+
+        system_commands = system_commands_section.split('\n', 1)[1]
         system_commands = system_commands.replace("Custom instructions:", "").strip()
         system_commands = system_commands.replace("```", "").strip()
     
@@ -79,12 +84,7 @@ def parse(input_file):
                 assistant_response = section.split('\n', 1)[1].strip()
                 conversation_history.append({"role": "assistant", "content": assistant_response})
 
-            # Get latest_question
-            for message in reversed(conversation_history):
-                latest_question = message["content"]
-                break
-
-        return conversation_history, latest_question
+        return conversation_history
         
     # -------------------------------- #
     
@@ -103,9 +103,9 @@ def parse(input_file):
     file_content = open(input_file, 'r', encoding='utf-8').read()
 
     # Parse file content
-    parameters_section, sections = get_sections(file_content)
+    parameters_section, system_commands_section, conversation_sections = get_sections(file_content)
     parse_parameters_section(parameters_section)
-    parse_system_commands(sections)
-    conversation_history, latest_question = parse_conversation_history(sections)
+    parse_system_commands(system_commands_section)
+    conversation_history = parse_conversation_history(conversation_sections)
 
-    return conversation_history, latest_question, mode, system_commands, max_tokens
+    return conversation_history, mode, system_commands, max_tokens

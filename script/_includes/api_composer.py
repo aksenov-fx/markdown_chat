@@ -4,13 +4,9 @@ def compose_api_request(result):
 
     # Unpack the [result]
     (conversation_history,
-     latest_question,
      mode,
      system_commands,
      max_tokens) = result
-
-    # Compose latest quesion json
-    latest_question = [{"role": "user", "content": latest_question}]
 
     # Set chat mode
     if mode == "Default":
@@ -28,8 +24,7 @@ def compose_api_request(result):
             "max_tokens": max_tokens,
             "stream": True,
 
-            "messages": [{"role": "system", "content": system_commands}] + 
-            (conversation_history if mode in ["ChatGPT", "Claude"] else latest_question)
+            "messages": [{"role": "system", "content": system_commands}] + conversation_history 
     }
 
     # Set Claude API parameters
@@ -38,7 +33,7 @@ def compose_api_request(result):
             "model": config.claude_model,
             "max_tokens": max_tokens,
             "system": system_commands,
-            "messages": (conversation_history if mode in ["ChatGPT", "Claude"] else latest_question)
+            "messages": conversation_history
         }
 
     return api_params, mode

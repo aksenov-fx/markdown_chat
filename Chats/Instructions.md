@@ -13,7 +13,7 @@ Custom instructions:
  1. Step 1
  2. Step 2
 
- Below is a list of commands that a user may respond with:
+ If a user responds with one of the following symbols, treat it as a special command:
  e:   (E)laborate on all steps.
  o:   Return a numbered list of other (o)ptions to achieve the instruction goal.
       The list should not contain the instruction steps yet, only the options.
