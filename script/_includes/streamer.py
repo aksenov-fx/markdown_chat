@@ -6,7 +6,7 @@ from script._includes.logger import log
 
 # -------------------------------- #
 
-def stream(mode, client, file_path, api_params):
+def stream(client_type, client, file_path, api_params):
     if config.debug_mode: return
 
     # -------------------------------- #
@@ -18,7 +18,7 @@ def stream(mode, client, file_path, api_params):
 
     # -------------------------------- #
 
-    def stream_gpt():
+    def stream_openai():
         response_text = ""
         stream = client.chat.completions.create(**api_params)
         for chunk in stream:
@@ -39,15 +39,16 @@ def stream(mode, client, file_path, api_params):
 
     # -------------------------------- #
 
-    # 1. Add the assistant marker before starting the stream
+    # 1. Add the assistant marker before starting the stream    
     file_write(f"\n\n<hr class=\"__AI_plugin_role-assistant\">\n\n")
 
     # -------------------------------- #
 
     # 2. Stream response to file
-    if mode.startswith("ChatGPT"):
-        stream_gpt()
-    elif mode.startswith("Claude"):
+    time.sleep(2)
+    if client_type == "OpenAI":
+        stream_openai()
+    elif client_type == "Anthropic":
         stream_claude()
 
     # -------------------------------- #

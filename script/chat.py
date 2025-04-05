@@ -27,8 +27,12 @@ The code was tested with:
 
 # Gets API keys
 
-chatgpt_api_key = open(os.path.join(os.path.dirname(__file__), "chatgpt_api_key.txt")).read().strip()
-claude_api_key = open(os.path.join(os.path.dirname(__file__), "claude_api_key.txt")).read().strip()
+def get_api_key(filename):
+    return open(os.path.join(os.path.dirname(__file__), filename)).read().strip()
+
+chatgpt_api_key = get_api_key('chatgpt_api_key.txt')
+claude_api_key = get_api_key('claude_api_key.txt')
+openrouter_api_key = get_api_key('openrouter_api_key.txt')
 
 # -------------------------------- #
 
@@ -42,6 +46,12 @@ if claude_api_key:
     import anthropic
     claude_client = anthropic.Anthropic(api_key=claude_api_key)    
 
+# Create OpenRouter streamer
+if openrouter_api_key:
+    import openai
+    openrouter_client = openai.OpenAI(api_key=openrouter_api_key, 
+                                      base_url='https://openrouter.ai/api/v1')
+
 # -------------------------------- #
 
 def process_file(file_path):
@@ -50,14 +60,20 @@ def process_file(file_path):
     result = parse(file_path)
 
     # Compose API
-    api_params, mode = compose_api_request(result)
+    api_params, mode, client_type, provider = compose_api_request(result)
 
     # Print API to terminal
     log(api_params=api_params,mode=mode)
 
     # Post API request and stream response to file_path
-    client = ( openai_client if mode.startswith("ChatGPT") else claude_client )
-    stream(mode, client, file_path, api_params)
+    if provider == "OpenRouter":
+        client = openrouter_client
+    elif provider == "Anthropic":
+        client = claude_client
+    elif provider == "OpenAI":
+        client = openai_client
+        
+    stream(client_type, client, file_path, api_params)
 
 # -------------------------------- #
 
@@ -78,7 +94,7 @@ class PathHandler(socketserver.BaseRequestHandler):
 
 # Start script
 if config.create_listener:
-    # Create Listener and accept commands from command line
+    # Create Listener and accept commands from TCP Server
     with socketserver.ThreadingTCPServer(('localhost', 9992), PathHandler) as server:
         print("Server listening on port 9992")
         server.serve_forever()

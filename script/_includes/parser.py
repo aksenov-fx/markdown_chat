@@ -90,7 +90,7 @@ def parse(input_file):
     
     # Set vars
     conversation_history = []
-    modes = list(config.mode_map.values())
+    modes = list(config.endpoints.keys())
 
     # Parameters (will be overwritten if parsed from file)
     mode = "Default"

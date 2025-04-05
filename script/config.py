@@ -9,17 +9,28 @@ create_listener = True
 debug_mode = False 
 
 # Set default chat mode
-default_chat_mode = "Claude"
+default_chat_mode = "c:"
 
-# Set mode map
-mode_map = {
-    "ChatGPT": "g:",
-    "Claude": "c:",
+endpoints = {
+    "g:": {
+        "name": "ChatGPT",
+        "model": "gpt-4o",
+        "client": "OpenAI",
+        "provider": "OpenAI"
+    },
+    "c:": {
+        "name": "Claude",
+        "model": "claude-3-7-sonnet-20250219",
+        "client": "Anthropic",
+        "provider": "Anthropic"
+    },
+    "d:": {
+        "name": "DSv3",
+        "model": "deepseek/deepseek-chat-v3-0324:free",
+        "client": "OpenAI",
+        "provider": "OpenRouter"
+    }
 }
-
-# Set model names
-chatgpt_model = "gpt-4o"
-claude_model = "claude-3-5-sonnet-20241022"
 
 # Set default API parameters
 system_commands = "I am a helpful assistant."
