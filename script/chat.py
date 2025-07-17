@@ -8,6 +8,7 @@ from script._includes.parser import parse
 from script._includes.api_composer import compose_api_request
 from script._includes.logger import log
 from script._includes.streamer import stream
+from script._includes.instructions_reader import read_instructions
 
 # -------------------------------- #
 """
@@ -55,13 +56,16 @@ if openrouter_api_key:
 # -------------------------------- #
 
 def process_file(file_path):
-
+    
     # Parse md file
-    result = parse(file_path)
-
+    parsed_result = parse(file_path)
+    
+    # Read instructions
+    parsed_result[2] = read_instructions(parsed_result[2])
+    
     # Compose API
-    api_params, mode, client_type, provider = compose_api_request(result)
-
+    api_params, mode, client_type, provider = compose_api_request(parsed_result)
+    
     # Print API to terminal
     log(api_params=api_params,mode=mode)
 

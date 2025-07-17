@@ -21,11 +21,15 @@ def compose_api_request(result):
 
     # Set API parameters based on the prefix
     if client == "OpenAI":
+        messages = conversation_history
+        if system_commands:
+            messages = [{"role": "system", "content": system_commands}] + conversation_history
+            
         api_params = {
             "model": model,
             "max_tokens": max_tokens,
             "stream": True,
-            "messages": [{"role": "system", "content": system_commands}] + conversation_history 
+            "messages": messages
         }
 
     elif client == "Anthropic":

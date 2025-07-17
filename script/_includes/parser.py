@@ -45,7 +45,7 @@ def parse(input_file):
         system_commands = system_commands_section.split('\n', 1)[1]
         system_commands = system_commands.replace("Custom instructions:", "").strip()
         system_commands = system_commands.replace("```", "").strip()
-    
+
     # -------------------------------- #
 
     def parse_conversation_history(sections):
@@ -108,4 +108,4 @@ def parse(input_file):
     parse_system_commands(system_commands_section)
     conversation_history = parse_conversation_history(conversation_sections)
 
-    return conversation_history, mode, system_commands, max_tokens
+    return [conversation_history, mode, system_commands, max_tokens]

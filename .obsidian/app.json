@@ -10,7 +10,6 @@
     "editor:configure-toolbar",
     "editor:toggle-keyboard"
   ],
-  "showRibbon": false,
   "showInlineTitle": true,
   "showLineNumber": false
 }

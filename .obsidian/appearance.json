@@ -7,5 +7,6 @@
   "enabledCssSnippets": [
     "headings"
   ],
-  "showViewHeader": true
+  "showViewHeader": true,
+  "showRibbon": false
 }

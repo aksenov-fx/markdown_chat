@@ -1,10 +1,13 @@
-import json
+import json, os
 from script import config
 
 def log(api_params="", mode="", path="", posix_file_path="", response=""):
     if not config.enable_logs:
         return
     
+    if not response:
+        os.system('clear' if os.name == 'posix' else 'cls')
+
     if mode:
         print("Mode: ", mode)
     
