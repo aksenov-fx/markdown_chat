@@ -1,0 +1,13 @@
+{
+  "files": [],
+  "templaterFiles": [
+    "MoveNote.md",
+    "ClearNote.md",
+    "Split.md",
+    "Split_Note.md",
+    "Switch.md"
+  ],
+  "newFileTemplates": [],
+  "openNewFileTemplateInNewPane": false,
+  "useNewFileTemplateOnFileCreation": false
+}

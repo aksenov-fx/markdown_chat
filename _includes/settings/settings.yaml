@@ -1,0 +1,14 @@
+default_model: "Claude 3"
+model: null
+endpoint: null
+temperature: 0.8
+max_tokens: 100000
+history_path: "chat.md"
+separator: "\n----\n"
+splitter: "\n****\n"
+interrupt_flag: false
+write_interval: 0.0
+debug: false
+print_messages: true
+include_reasoning: true
+print_reasoning: true

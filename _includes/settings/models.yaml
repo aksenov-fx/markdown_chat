@@ -1,0 +1,11 @@
+"Claude 4":
+  name: "anthropic/claude-sonnet-4"
+
+"Claude 3":
+  name: "anthropic/claude-3.7-sonnet"
+
+"Deepseek R1":
+  name: "deepseek/deepseek-r1:free"
+
+"Deepseek V3":
+  name: "deepseek/deepseek-chat-v3-0324:free"

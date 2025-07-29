@@ -1,0 +1,130 @@
+{
+  "main": {
+    "id": "f3f560a414fdd7da",
+    "type": "split",
+    "children": [
+      {
+        "id": "f49dab08b55d3fd6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e39e614b0dd1917b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Chats/Search.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Search"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6507612677139505",
+    "type": "split",
+    "children": [
+      {
+        "id": "5a31308d96e8d405",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "feeba5bdfc4b8076",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "259613cca8931d2f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 228.5
+  },
+  "right": {
+    "id": "dd321564525cf185",
+    "type": "split",
+    "children": [
+      {
+        "id": "87ff090181626a18",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "58ba80272626a7c2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "_Chat/Questions.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Questions"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "command-palette:Open command palette": false,
+      "templater-obsidian:Templater": false
+    }
+  },
+  "active": "e39e614b0dd1917b",
+  "lastOpenFiles": [
+    "Chats/Questions.md",
+    "Chats/Problems.md",
+    "Chats/Instructions.md",
+    "Chats/General.md",
+    "Chats/Code request.md",
+    "_Templates/Switch.md",
+    "Chats/Search.md",
+    "Chats/Instructions (split).md",
+    "_Templates/Split_Note.md",
+    "_Templates/Split.md",
+    "Chats/Code request 1.md",
+    "_Templates/ClearNote.md",
+    "_Archive/250726153705-Questions.md",
+    "_Archive/250726153656-Questions.md",
+    "_Templates/MoveNote.md",
+    "_Templates/Delete-last-response.md",
+    "Questions (short).md",
+    "README.MD",
+    "_Chat/Questions.md",
+    "_Chat/Questions (short).md"
+  ]
+}
