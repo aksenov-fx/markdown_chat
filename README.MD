@@ -22,9 +22,10 @@ The script will install Python dependencies and ask for your API key
 Instruction sets are located in `_includes\settings\_instructions`  
 Commonly used instruction sets can be changed in `Vault\_Templates\Switch.md`
 
-**Alt+1-5** - Set model number 
+**Alt+1-5** - Set model number  
 Models are listed in `_includes\settings\models.yaml`  
-Default model can be changed in `_includes\settings\settings.yaml`
+Default model can be changed in `_includes\settings\settings.yaml`  
+To chat with model without updating `models.yaml`, input the model name from OpenRouter into frontmatter `model` property instead of model number
 
 ## How it works
 To get a response, **Obsidian** sends a TCP request to python app, which listens on port **TCP 9992**. The app gets a response and writes it to MD file, while **Obsidian** displays the changes in real time.  

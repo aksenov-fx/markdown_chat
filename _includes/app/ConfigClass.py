@@ -8,6 +8,7 @@ class ChatConfig:
     model: dict
     temperature: float
     max_tokens: int
+    trim_history: bool
     print_messages: bool
     include_reasoning: bool
     separator: str

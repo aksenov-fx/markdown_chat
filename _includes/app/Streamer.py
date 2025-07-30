@@ -47,7 +47,7 @@ class Streamer:
                 model=self.model,
                 messages=messages,
                 stream=True,
-                max_tokens=self.config.max_tokens,
+                #max_tokens=self.config.max_tokens,
                 temperature=self.config.temperature,
                 extra_body={ "include_reasoning": self.config.include_reasoning }
             )

@@ -1,14 +1,15 @@
-default_model: "Claude 3"
+default_model: "Claude 4"
 model: null
 endpoint: null
 temperature: 0.8
 max_tokens: 100000
+trim_history: False     # Exclude first messages from API request if conversation exceeds max_tokens
 history_path: "chat.md"
-separator: "\n----\n"
-splitter: "\n****\n"
+separator: "\n----\n"   # Request/response separator
+splitter: "\n****\n"    # Conversation splitter for excluding previous parts
 interrupt_flag: false
-write_interval: 0.0
-debug: false
+write_interval: 0.0     # 1.0 would make writes to a file once a second
+debug: false            # Print API request, but do not send it
 print_messages: true
-include_reasoning: true
+include_reasoning: true # Openrouter will return reasoning if present
 print_reasoning: true

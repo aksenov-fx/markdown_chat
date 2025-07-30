@@ -111,8 +111,11 @@ class HistoryParser(HistoryMixin):
     def parse_model(self):
         from _includes import models
         if self.frontmatter.get('model'):
-            model_number = int(self.frontmatter['model'])
-            self.config.model = list(models.values())[model_number - 1]['name']
+            try:
+                model_number = int(self.frontmatter['model'])
+                self.config.model = list(models.values())[model_number - 1]['name']
+            except ValueError:
+                self.config.model = self.frontmatter['model']
 
 # Trim
 
@@ -134,6 +137,6 @@ class HistoryParser(HistoryMixin):
     def process(self):
         self.split_conversation()
         self.clean_header()
-        self.trim_content()
+        if self.config.trim_history: self.trim_content()
         self.parse_instructions()
         self.parse_model()
