@@ -1,4 +1,5 @@
 from typing import Optional, List, Dict
+from .History import HistoryParser
 
 class ApiComposer:
 
@@ -8,7 +9,7 @@ class ApiComposer:
             messages.append({"role": role, "content": content.strip()})
 
     @staticmethod
-    def compose_messages(history) -> List[Dict[str, str]]:
+    def compose_messages(history: HistoryParser) -> List[Dict[str, str]]:
         messages = []
 
         ApiComposer.append_message(messages, "system", history.custom_instructions)

@@ -13,3 +13,4 @@ debug: false            # Print API request, but do not send it
 print_messages: true
 include_reasoning: true # Openrouter will return reasoning if present
 print_reasoning: true
+add_header: true

@@ -18,3 +18,4 @@ class ChatConfig:
     write_interval: float
     history_path: Path
     debug: bool
+    add_header: bool

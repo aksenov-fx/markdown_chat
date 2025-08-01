@@ -1,6 +1,5 @@
-import yaml, os, json
+import yaml, os, time, json
 from importlib import resources
-from .ConfigClass import ChatConfig
 
 class Utility:
 
@@ -19,7 +18,7 @@ class Utility:
         print(formatted_str)
 
     @staticmethod
-    def read_instructions(instructions):
+    def read_instructions(instructions: str):
         if not instructions.startswith("{"):
             return instructions
         
@@ -38,7 +37,7 @@ class Utility:
         return posix_file_path, method_name
 
     @staticmethod
-    def remove_last_response():
-        from _includes import history
-        history.refresh()
-        history.remove_last_response()
+    def update_timestamp(file_path):
+        time.sleep(0.3)
+        current_time = time.time()
+        os.utime(file_path, (current_time, current_time))

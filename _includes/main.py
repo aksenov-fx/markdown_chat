@@ -1,27 +1,29 @@
-import os
+import os, time
 import socketserver
 import threading
 
-from _includes import config, history, history_parsed
+from _includes import config
 from .app.Utility import Utility
 from .app.Chat import Chat
+from _includes.app.History import HistoryChanger, HistoryParser
 
 def process_request(data):
     config.interrupt_flag = False
 
     file_path, method_name = Utility.process_tcp_data(data)
 
-    history.refresh(file_path)
-    history_parsed.refresh(file_path)
-
     os.system('clear' if os.name == 'posix' else 'cls')
     print("\nMethod: " + method_name + "\n")
     
     if method_name == "chat":
-        Chat.generate()
+        history = HistoryChanger(file_path, config)
+        history_parsed = HistoryParser(file_path, config)
+        Chat.generate(history, history_parsed)
 
     elif method_name == "remove_last_response":
-        Utility.remove_last_response()
+        history = HistoryChanger(file_path, config)
+        history.remove_last_response()
+        Utility.update_timestamp(file_path)
 
     elif method_name == "interrupt_write":
         config.interrupt_flag = True

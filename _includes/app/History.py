@@ -1,8 +1,9 @@
 import yaml
+from .ConfigClass import ChatConfig
 
 class HistoryMixin:
     
-    def __init__(self, path, config):
+    def __init__(self, path, config: ChatConfig):
 
         self.path = path
 
@@ -10,8 +11,8 @@ class HistoryMixin:
         self.frontmatter = yaml.safe_load(self.content.split("---\n")[1])
         self.custom_instructions = self.content.split("```")[1].partition(":")[2].strip()
 
-        self.config = config
-        self.config = self.update_config()
+        self.model = config.model
+        self.config = self.update_config(config)
         self.separator = self.config.separator
         self.splitter = self.config.splitter
 
@@ -30,15 +31,8 @@ class HistoryMixin:
         except FileNotFoundError: 
             return ""
     
-    def refresh(self, new_path=None, config=None):
-        if not new_path: new_path = self.path
-        if not config: config = self.config
-        self.__init__(new_path, config)
-    
-    def update_config(self):
-        from .ConfigClass import ChatConfig
-        
-        values = self.config.__dict__.copy()
+    def update_config(self, config: ChatConfig):
+        values = config.__dict__.copy()
         values.update(self.frontmatter)
         return (ChatConfig(**values))
         
@@ -76,7 +70,7 @@ class HistoryChanger(HistoryMixin):
 
     def fix_separator(self):
         if self.parts[-1] == "" or self.parts[-1].strip() == "#": return
-        elif self.parts_even: self.parts.append("# ")
+        elif self.parts_even and self.config.add_header: self.parts.append("# ")
         else: self.parts.append("")
 
         self.join_and_write()
@@ -106,16 +100,17 @@ class HistoryParser(HistoryMixin):
 
     def parse_instructions(self):
         from .Utility import Utility
-        self.custom_instructions = Utility.read_instructions(self.custom_instructions)
+        return Utility.read_instructions(self.custom_instructions)
 
     def parse_model(self):
         from _includes import models
-        if self.frontmatter.get('model'):
-            try:
-                model_number = int(self.frontmatter['model'])
-                self.config.model = list(models.values())[model_number - 1]['name']
-            except ValueError:
-                self.config.model = self.frontmatter['model']
+        if not self.frontmatter.get('model'): return self.model
+
+        try:
+            model_number = int(self.frontmatter['model'])
+            return list(models.values())[model_number - 1]['name']
+        except ValueError:
+            return self.frontmatter['model']
 
 # Trim
 
@@ -138,5 +133,5 @@ class HistoryParser(HistoryMixin):
         self.split_conversation()
         self.clean_header()
         if self.config.trim_history: self.trim_content()
-        self.parse_instructions()
-        self.parse_model()
+        self.custom_instructions = self.parse_instructions()
+        self.model = self.parse_model()

@@ -14,6 +14,3 @@ config.endpoint = endpoint
 
 models = Utility.read_yaml(settings_folder + 'models.yaml')
 config.model = models[config.default_model]['name']
-
-history = HistoryChanger(config.history_path, config)
-history_parsed = HistoryParser(config.history_path, config)

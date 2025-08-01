@@ -1,19 +1,21 @@
 import openai
-import sys
-import time
-import threading
+import sys, time, threading
 from typing import List, Dict
+
+from .History import HistoryChanger
+from .Utility import Utility
+from .ConfigClass import ChatConfig
 
 from _includes import config
 
 class Streamer:
 
-    def __init__(self, history_object: str, config):
+    def __init__(self, history_object: HistoryChanger, config: ChatConfig, model: str):
         self.history = history_object
         self.config = config
         self.endpoint = config.endpoint['url']
         self.api_key = config.endpoint['api_key']
-        self.model = config.model
+        self.model = model
         self.token_buffer = ""
         self.complete_response = ""
         self.last_write_time = time.time()
@@ -39,6 +41,8 @@ class Streamer:
                 self.last_write_time = time.time()
 
     def stream_response(self, messages: List[Dict[str, str]]) -> None:
+
+        time.sleep(0.3)
 
         try:
             client = openai.OpenAI(base_url=self.endpoint, api_key=self.api_key)
@@ -71,7 +75,8 @@ class Streamer:
                 
             self.flush_buffer()
             self.history.fix_separator()
-            
+            Utility.update_timestamp(self.history.path)
+
             return self.complete_response
             
         except KeyboardInterrupt:
