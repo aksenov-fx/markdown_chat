@@ -1,6 +1,5 @@
 from .app.ConfigClass import ChatConfig
 from .app.Utility import Utility
-from .app.History import HistoryChanger, HistoryParser
 
 settings_folder = '_includes/settings/'
 

@@ -1,4 +1,4 @@
-import yaml, os, time, json
+import yaml, os, json
 from importlib import resources
 
 class Utility:
@@ -37,7 +37,5 @@ class Utility:
         return posix_file_path, method_name
 
     @staticmethod
-    def update_timestamp(file_path):
-        time.sleep(0.3)
-        current_time = time.time()
-        os.utime(file_path, (current_time, current_time))
+    def clear_screen():
+        os.system('clear' if os.name == 'posix' else 'cls')

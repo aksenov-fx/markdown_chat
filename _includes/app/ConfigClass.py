@@ -19,3 +19,5 @@ class ChatConfig:
     history_path: Path
     debug: bool
     add_header: bool
+    include: Path
+    mode: str

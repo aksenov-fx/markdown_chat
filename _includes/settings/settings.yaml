@@ -14,3 +14,5 @@ print_messages: true
 include_reasoning: true # Openrouter will return reasoning if present
 print_reasoning: true
 add_header: true
+include: ""
+mode: ""

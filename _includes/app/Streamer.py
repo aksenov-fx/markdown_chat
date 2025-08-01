@@ -75,7 +75,6 @@ class Streamer:
                 
             self.flush_buffer()
             self.history.fix_separator()
-            Utility.update_timestamp(self.history.path)
 
             return self.complete_response
             

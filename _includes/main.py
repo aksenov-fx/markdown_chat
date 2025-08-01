@@ -1,4 +1,3 @@
-import os, time
 import socketserver
 import threading
 
@@ -12,7 +11,7 @@ def process_request(data):
 
     file_path, method_name = Utility.process_tcp_data(data)
 
-    os.system('clear' if os.name == 'posix' else 'cls')
+    Utility.clear_screen()
     print("\nMethod: " + method_name + "\n")
     
     if method_name == "chat":
@@ -21,9 +20,7 @@ def process_request(data):
         Chat.generate(history, history_parsed)
 
     elif method_name == "remove_last_response":
-        history = HistoryChanger(file_path, config)
-        history.remove_last_response()
-        Utility.update_timestamp(file_path)
+        HistoryChanger(file_path, config).remove_last_response()
 
     elif method_name == "interrupt_write":
         config.interrupt_flag = True

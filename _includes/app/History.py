@@ -1,4 +1,4 @@
-import yaml
+import os, time, yaml
 from .ConfigClass import ChatConfig
 
 class HistoryMixin:
@@ -31,6 +31,11 @@ class HistoryMixin:
         except FileNotFoundError: 
             return ""
     
+    def update_timestamp(self):
+        time.sleep(0.3)
+        current_time = time.time()
+        os.utime(self.path, (current_time, current_time))
+
     def update_config(self, config: ChatConfig):
         values = config.__dict__.copy()
         values.update(self.frontmatter)
@@ -61,7 +66,8 @@ class HistoryChanger(HistoryMixin):
     def join_and_write(self):
         self.update(self.parts)
         open(self.path, 'w', encoding='utf-8').write(self.content)
-
+        self.update_timestamp()
+        
     def append_history(self, content: str) -> None:
         self.parts[-1] += content
         open(self.path, 'a', encoding='utf-8').write(content)
@@ -74,6 +80,7 @@ class HistoryChanger(HistoryMixin):
         else: self.parts.append("")
 
         self.join_and_write()
+        return self
 
     def remove_last_response(self) -> None:
         self.config.interrupt_flag = True
@@ -82,6 +89,7 @@ class HistoryChanger(HistoryMixin):
         else: self.parts = self.parts[:-2]
 
         self.join_and_write()
+        return self
 
 class HistoryParser(HistoryMixin):
 
@@ -97,6 +105,17 @@ class HistoryParser(HistoryMixin):
         for i, part in enumerate(self.parts):
             if i % 2 == 0 and part.startswith("# "): self.parts[i] = part[2:]
         self.update(self.parts)
+
+    def include_file(self):   
+        if self.frontmatter.get('include'):
+
+            included_content = self._read_file(self.frontmatter['include'])
+
+            included_parts = self.split_parts(included_content)
+            included_content = "\n\n".join(included_parts)
+
+            self.parts[0] = self.parts[0] + "\n\n" + included_content 
+            self.update(self.parts)
 
     def parse_instructions(self):
         from .Utility import Utility
@@ -133,5 +152,6 @@ class HistoryParser(HistoryMixin):
         self.split_conversation()
         self.clean_header()
         if self.config.trim_history: self.trim_content()
+        self.include_file()
         self.custom_instructions = self.parse_instructions()
         self.model = self.parse_model()
